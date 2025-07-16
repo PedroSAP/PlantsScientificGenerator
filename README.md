@@ -7,7 +7,6 @@ This project is a FastAPI-based REST API powered by a public LLM (from Hugging F
 - Natural language input
 - Name extraction and classification using `flan-t5-base`
 - Easy deployment via Docker
-- OpenAPI docs at `/docs`
 
 ## 📦 Setup
 
