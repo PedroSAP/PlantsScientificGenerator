@@ -1,6 +1,6 @@
 # 🌿 PlantsScientificGenerator
 
-This project is a FastAPI-based REST API powered by a public LLM (from Hugging Face) that allows users to input sentences with common plant names and receive their corresponding scientific names.
+This project is a FastAPI-based REST API powered by a public LLM (from Hugging Face) that allows users to input the name of a common plant and receive its corresponding scientific name.
 
 ## 🚀 Features
 
@@ -28,7 +28,7 @@ docker run -p 8000:8000 plants-api
 
 ```json
 {
-  "user_sentence": "What is the scientific name of the monkey puzzle tree?"
+  "user_sentence": "Sunflower"
 }
 ```
 
@@ -36,8 +36,7 @@ docker run -p 8000:8000 plants-api
 
 ```json
 {
-  "original_sentence": "...",
-  "detected_common_name": "monkey puzzle tree",
-  "scientific_name": "Araucaria araucana"
+  "original_input": "Sunflower",
+  "scientific_name": "'Helianthus annuus'"
 }
 ```
