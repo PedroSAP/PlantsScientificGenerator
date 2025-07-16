@@ -8,6 +8,7 @@
 # fastapi
 # uvicorn
 # transformers
+# torch
 
 from fastapi import FastAPI
 from pydantic import BaseModel
@@ -17,31 +18,26 @@ from transformers import pipeline
 app = FastAPI(title="PlantsScientificGenerator")
 
 # 2. Load a public LLM from Hugging Face
-llm = pipeline("text-generation", model="google/flan-t5-base", tokenizer="google/flan-t5-base")
+llm = pipeline("text2text-generation", model="google/flan-t5-xl", tokenizer="google/flan-t5-xl")
 
 # 3. Request model
 class PlantSentenceRequest(BaseModel):
     user_sentence: str
 
-# 4. Helper function to extract the plant's common name from a sentence
-def extract_common_name(sentence):
-    prompt = f"From this sentence, what is the common plant name mentioned: '{sentence}'? Respond only with the name."
-    response = llm(prompt, max_new_tokens=30, do_sample=True, truncation=True)[0]['generated_text']
-    return response.strip()
-
-# 5. Function to retrieve the scientific name from a common name
+# 4. Function to retrieve the scientific name from a common name
 def get_scientific_name(common_name):
-    prompt = f"What is the scientific name of the plant known as '{common_name}'?"
-    response = llm(prompt, max_new_tokens=50, do_sample=True, truncation=True)[0]['generated_text']
+    prompt = (
+        f"What is the scientific (Latin) name of the plant known commonly as '{common_name}'? "
+        "Respond with only the binomial name, like 'Genus species'. If unknown, say 'Unknown'."
+    )
+    response = llm(prompt, max_new_tokens=20, do_sample=False, truncation=True)[0]['generated_text']
     return response.strip()
 
-# 6. Main endpoint
+# 5. Main endpoint
 @app.post("/scientific-name")
 async def generate_scientific_name_from_sentence(plant: PlantSentenceRequest):
-    common_name = extract_common_name(plant.user_sentence)
-    scientific_name = get_scientific_name(common_name)
+    scientific_name = get_scientific_name(plant.user_sentence)
     return {
-        "original_sentence": plant.user_sentence,
-        "detected_common_name": common_name,
+        "original_input": plant.user_sentence,
         "scientific_name": scientific_name
     }
