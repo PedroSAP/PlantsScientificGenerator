@@ -5,7 +5,7 @@ This project is a FastAPI-based REST API powered by a public LLM (from Hugging F
 ## 🚀 Features
 
 - Natural language input
-- Name extraction and classification using `flan-t5-base`
+- Name extraction and classification using `flan-t5-xl`
 - Easy deployment via Docker
 
 ## 📦 Setup
@@ -20,7 +20,7 @@ uvicorn app.main:app --reload
 ## 🐳 Docker Support
 
 ```bash
-docker build -t plants-api .
+docker build -t plants-api 
 docker run -p 8000:8000 plants-api
 ```
 
